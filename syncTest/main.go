@@ -114,8 +114,8 @@ func main() {
 	// 得到的结果为0，证明加锁安全
 	//rwMutex(10000)
 	// 得到结果不为0，证明不加锁不安全
-	//rwWithoutMutex(10000)
+	rwWithoutMutex(10000)
 	//mutex(1000)
-	wg()
+	//wg()
 }
 
