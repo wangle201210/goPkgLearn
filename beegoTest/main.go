@@ -1,8 +1,8 @@
 package main
 
 import (
-	_ "github.com/go-sql-driver/mysql"
 	_ "beegoTest/routers"
+	_ "github.com/go-sql-driver/mysql"
 
 	"fmt"
 	"github.com/astaxie/beego"
