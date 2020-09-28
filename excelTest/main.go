@@ -20,6 +20,7 @@ func main() {
 	file, err := xlsx.OpenFile(fileName)
 	if err != nil {
 		fmt.Printf("read file err: %s", err)
+		return
 	}
 	fmt.Printf("读取%s文件成功\n", fileName)
 	sheet := file.Sheet[sheetName]
@@ -62,8 +63,8 @@ func main() {
 	// 重新生成文件
 	writingXlsx(s4)
 	fmt.Println("重新生成文件成功")
-	fmt.Println("按Enter结束")
-	fmt.Scanf("")
+	fmt.Println("按Enter退出")
+	fmt.Scanln()
 }
 
 // 求取平均值
