@@ -15,13 +15,14 @@ func mutex(conut int) {
 	lock := sync.Mutex{}
 	// 锁的竞争是公平（随机）的，任何一个都可能先获取到锁
 	// 但是goroutine不是公平的。。。
+	//runtime.GOMAXPROCS(1)
 	for i := 1; i < conut; i++ {
 		go func(i int) {
 			lock.Lock()
 			defer lock.Unlock()
 			fmt.Printf("我在第%d个chan 处被锁了\n",i)
-			time.Sleep(time.Second )
-			fmt.Printf("过去了1s，我在%d处解锁了\n",i)
+			//time.Sleep(time.Second )
+			//fmt.Printf("过去了1s，我在%d处解锁了\n",i)
 			c <- struct {
 			}{}
 		}(i)
@@ -114,8 +115,8 @@ func main() {
 	// 得到的结果为0，证明加锁安全
 	//rwMutex(10000)
 	// 得到结果不为0，证明不加锁不安全
-	rwWithoutMutex(10000)
-	//mutex(1000)
+	//rwWithoutMutex(10000)
+	mutex(10)
 	//wg()
 }
 
