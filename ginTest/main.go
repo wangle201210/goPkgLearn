@@ -1,17 +1,25 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+)
 
 type data struct {
 	Message string `json:"message"`
 }
 func main() {
 	r := gin.Default()
-	v1 := r.Group("/api")
-	{
-		v1.GET("/test", test)
-		v1.GET("/say", say)
-	}
+	r.Handle("GET","/used/abc", func(c *gin.Context) {
+		c.JSON(123,"abc")
+	})
+	r.Handle("GET","/used/*abc", func(c *gin.Context) {
+		c.JSON(123,"*abc")
+	})
+	//v1 := r.Group("/api")
+	//{
+	//	v1.GET("/test", test)
+	//	v1.GET("/say", say)
+	//}
 	r.Run(":3001")
 }
 

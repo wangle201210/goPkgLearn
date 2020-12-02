@@ -1,10 +1,20 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
+
+	"github.com/fvbock/endless"
 )
+
+var addr = ":8888"
 
 // 开启服务
 func server() {
@@ -86,11 +96,52 @@ func customGet() {
 	}
 	fmt.Println(string(content))
 }
+
+
+// 优雅的热重启
+func artisanShutdown() {
+	r := http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
+		writer.Write([]byte("yes i do"))
+	})
+	s := &http.Server{
+		Addr: addr,
+		Handler: r,
+	}
+	go func() {
+		log.Println("start")
+		if err := s.ListenAndServe(); err != nil {
+			log.Printf("Listen: %s\n", err)
+		}
+	}()
+	q := make(chan os.Signal)
+	// 监听系统的interrupt（退出操作）
+	signal.Notify(q,os.Interrupt)
+	<-q
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
+	defer cancel()
+	if err := s.Shutdown(ctx); err != nil {
+		log.Println("shutdown",err)
+	}
+	// 每次死掉后就重新唤醒一个
+	for  {
+		ns := endless.NewServer(addr, r)
+		ns.BeforeBegin = func(add string) {
+			log.Printf("Actual pid is %d", syscall.Getpid())
+		}
+		err := ns.ListenAndServe()
+		if err != nil {
+			log.Printf("Server err: %v", err)
+		}
+		log.Println("server exit")
+	}
+
+}
 func main() {
-	server()
+	//server()
 	//serverWithMiddleWare()
 	//fileServer()
 	//simpleGet()
 	//customGet()
+	artisanShutdown()
 }
 
