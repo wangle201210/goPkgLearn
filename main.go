@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
+	"github.com/wangle201210/goPkgLearn/file"
 	"math/rand"
 	"runtime"
 	"time"
-
 	//"github.com/go-kratos/kratos/pkg/naming"
 	//"github.com/go-kratos/kratos/pkg/naming/discovery"
 )
@@ -105,4 +105,6 @@ func main() {
 	//floatTest()
 	//lenTest()
 	//quickTest(100000)
+	//convert.Octal()
+	file.T1()
 }
